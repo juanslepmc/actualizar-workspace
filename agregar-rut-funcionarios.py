@@ -48,7 +48,7 @@ def transformar_legislacion(valor):
 
 def sanitizar_nombre_archivo(nombre):
     """
-    Limpia el nombre del establecimiento para usarlo como nombre de archivo válido en el sistema.
+    Limpia el nombre del establecimiento para usarlo como nombre de archivo válido.
     """
     if pd.isna(nombre) or str(nombre).strip() == "":
         return "Sin_Establecimiento"
@@ -58,7 +58,7 @@ def sanitizar_nombre_archivo(nombre):
 
 def formatear_csv_workspace(df_datos, mapping_cols=None, valores_fijos=None):
     """
-    Genera el formato CSV exacto de Google Workspace (29 columnas).
+    Genera la estructura exacta de 29 columnas para Google Workspace.
     """
     out_df = pd.DataFrame('', index=range(len(df_datos)), columns=PLANTILLA_WORKSPACE_COLUMNAS)
     
@@ -255,7 +255,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     excel_solo_a_eliminar = estructurar_salida_excel(df_solo_a, 'A')
     excel_solo_b_nuevos = estructurar_salida_excel(df_solo_b, 'B')
 
-    # 6. Generar estructuras CSV consolidadas para Google Workspace (29 columnas)
+    # 6. Generar CSV consolidado MATCH con Password = ****
     csv_match = formatear_csv_workspace(
         df_match,
         mapping_cols={
@@ -264,6 +264,9 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             'Email Address [Required]': 'Email Address [Required]',
             'Org Unit Path [Required]': 'Org Unit Path [Required]',
             'Employee ID': 'RUN_norm'
+        },
+        valores_fijos={
+            'Password [Required]': '****'
         }
     )
 
@@ -300,13 +303,12 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     os.makedirs(dir_match_sep, exist_ok=True)
     os.makedirs(dir_eliminar_sep, exist_ok=True)
 
-    # 8.1 Separar CSVs de MATCH por establecimiento
+    # 8.1 Separar CSVs de MATCH por establecimiento con Password = ****
+    count_match_files = 0
     if not df_match.empty:
-        # Usar el Centro Costo actualizado de B o el Establecimiento original de A
         df_match['Establecimiento_Grupo'] = df_match['Centro Costo'].fillna('').astype(str)
         df_match['Establecimiento_Grupo'] = df_match['Establecimiento_Grupo'].replace('', pd.NA).fillna(df_match['Establecimiento'])
 
-        count_match_files = 0
         for est_nombre, grupo in df_match.groupby('Establecimiento_Grupo'):
             csv_sub_match = formatear_csv_workspace(
                 grupo,
@@ -316,6 +318,9 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
                     'Email Address [Required]': 'Email Address [Required]',
                     'Org Unit Path [Required]': 'Org Unit Path [Required]',
                     'Employee ID': 'RUN_norm'
+                },
+                valores_fijos={
+                    'Password [Required]': '****'
                 }
             )
             nombre_file = f"{sanitizar_nombre_archivo(est_nombre)}.csv"
@@ -323,8 +328,8 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             count_match_files += 1
 
     # 8.2 Separar CSVs de ELIMINAR por establecimiento
+    count_eliminar_files = 0
     if not df_solo_a.empty:
-        count_eliminar_files = 0
         for est_nombre, grupo in df_solo_a.groupby('Establecimiento'):
             csv_sub_eliminar = formatear_csv_workspace(
                 grupo,
@@ -346,15 +351,16 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
 
     # 9. Resumen en consola
     cambios_est = len(df_match[df_match['Nuevo Establecimiento'] != ""]) if not df_match.empty else 0
-    
+
     print("\n--- RESUMEN DEL PROCESO ---")
-    print(f"✅ Coincidencias procesadas: {len(df_match)} (Con cambio de colegio: {cambios_est})")
+    print(f"✅ Coincidencias procesadas (Password='****'): {len(df_match)}")
+    print(f"🔄 Cambios de establecimiento detectados: {cambios_est}")
     print(f"➕ Funcionarios a agregar (Solo B): {len(df_solo_b)}")
     print(f"➖ Funcionarios a eliminar/archivar (Solo A): {len(df_solo_a)}")
     print(f"\n📁 Archivos principales generados en '{directorio_salida}':")
     print("  Excel (.xlsx): coincidencias.xlsx | solo_a_eliminar.xlsx | solo_b_nuevos.xlsx")
     print("  CSV (.csv):   match.csv | solo_a_eliminar.csv")
-    print(f"\n📂 Archivos individuales generados en '{dir_separados}':")
+    print(f"\n📂 Archivos individuales en '{dir_separados}':")
     print(f"  • {count_match_files} archivos creados en: separados/match/")
     print(f"  • {count_eliminar_files} archivos creados en: separados/eliminar/")
 
