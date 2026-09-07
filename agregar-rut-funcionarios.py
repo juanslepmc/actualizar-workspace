@@ -3,6 +3,19 @@ import unicodedata
 import re
 import os
 
+# Encabezados oficiales de Google Workspace (29 columnas)
+PLANTILLA_WORKSPACE_COLUMNAS = [
+    'First Name [Required]', 'Last Name [Required]', 'Email Address [Required]', 
+    'Password [Required]', 'Password Hash Function [UPLOAD ONLY]', 'Org Unit Path [Required]', 
+    'New Primary Email [UPLOAD ONLY]', 'Recovery Email', 'Home Secondary Email', 
+    'Work Secondary Email', 'Recovery Phone [MUST BE IN THE E.164 FORMAT]', 'Work Phone', 
+    'Home Phone', 'Mobile Phone', 'Work Address', 'Home Address', 'Employee ID', 
+    'Employee Type', 'Employee Title', 'Manager Email', 'Department', 'Cost Center', 
+    'Building ID', 'Floor Name', 'Floor Section', 'Change Password at Next Sign-In', 
+    'New Status [UPLOAD ONLY]', 'New Licenses [UPLOAD ONLY]', 
+    'Advanced Protection Program enrollment'
+]
+
 def normalizar_texto(texto):
     if pd.isna(texto):
         return ""
@@ -22,6 +35,96 @@ def normalizar_rbd(rbd):
         return ""
     rbd_str = str(rbd).replace('.', '').strip()
     return rbd_str.split('-')[0]
+
+def transformar_legislacion(valor):
+    if pd.isna(valor):
+        return ""
+    val_norm = normalizar_texto(valor)
+    if "ASISTENTES DE LA EDUCACION" in val_norm:
+        return "Asistentes Educación"
+    elif "ESTATUTO DOCENTE" in val_norm:
+        return "Docentes"
+    return str(valor).strip()
+
+def sanitizar_nombre_archivo(nombre):
+    """
+    Limpia el nombre del establecimiento para usarlo como nombre de archivo válido en el sistema.
+    """
+    if pd.isna(nombre) or str(nombre).strip() == "":
+        return "Sin_Establecimiento"
+    nombre_clean = re.sub(r'[\\/*?:"<>|]', "", str(nombre))
+    nombre_clean = re.sub(r'\s+', ' ', nombre_clean).strip()
+    return nombre_clean if nombre_clean else "Sin_Establecimiento"
+
+def formatear_csv_workspace(df_datos, mapping_cols=None, valores_fijos=None):
+    """
+    Genera el formato CSV exacto de Google Workspace (29 columnas).
+    """
+    out_df = pd.DataFrame('', index=range(len(df_datos)), columns=PLANTILLA_WORKSPACE_COLUMNAS)
+    
+    if mapping_cols:
+        for col_tpl, col_src in mapping_cols.items():
+            if col_src in df_datos.columns:
+                out_df[col_tpl] = df_datos[col_src].fillna('').values
+                
+    if valores_fijos:
+        for col_tpl, val in valores_fijos.items():
+            out_df[col_tpl] = val
+            
+    return out_df
+
+def estructurar_salida_excel(df, origen):
+    """
+    Estructura los DataFrames informativos para trazabilidad en Excel (.xlsx).
+    """
+    out = pd.DataFrame()
+    if df.empty:
+        return out
+
+    if origen == 'both':
+        out['First Name [Required]'] = df.get('First Name [Required]', '')
+        out['Last Name [Required]'] = df.get('Last Name [Required]', '')
+        out['Email Address [Required]'] = df.get('Email Address [Required]', '')
+        out['Employee ID'] = df.get('Employee ID', df.get('RUN_norm', ''))
+        out['Tipo'] = df['Tipo_x'] if 'Tipo_x' in df.columns else df.get('Tipo', '')
+        out['Org Unit Path [Required]'] = df.get('Org Unit Path [Required]', '')
+        out['RBD'] = df['RBD_x'] if 'RBD_x' in df.columns else df.get('RBD', '')
+        out['Establecimiento'] = df.get('Establecimiento', '')
+        out['Nuevo Establecimiento'] = df.get('Nuevo Establecimiento', '')
+        out['ID_A'] = df.get('ID_A', '')
+        out['ID_B'] = df.get('ID_B', '')
+    elif origen == 'A':
+        out['First Name [Required]'] = df.get('First Name [Required]', '')
+        out['Last Name [Required]'] = df.get('Last Name [Required]', '')
+        out['Email Address [Required]'] = df.get('Email Address [Required]', '')
+        out['Employee ID'] = df.get('Employee ID', '')
+        out['Tipo'] = df['Tipo_x'] if 'Tipo_x' in df.columns else df.get('Tipo', '')
+        out['Org Unit Path [Required]'] = df.get('Org Unit Path [Required]', '')
+        out['Org Unit Path nuevo [Required]'] = "/Archivados Funcionarios"
+        out['RBD'] = df['RBD_x'] if 'RBD_x' in df.columns else df.get('RBD', '')
+        out['Establecimiento'] = df.get('Establecimiento', '')
+        out['ID_A'] = df.get('ID_A', '')
+        out['ID_B'] = df.get('ID_B', '')
+    elif origen == 'B':
+        out['First Name [Required]'] = df.get('Nombres', '')
+        out['Last Name [Required]'] = (df.get('Apellido Paterno', pd.Series()).fillna('') + " " + df.get('Apellido Materno', pd.Series()).fillna('')).str.strip()
+        out['Email Address [Required]'] = ""
+        out['Employee ID'] = df.get('RUN_norm', '')
+        
+        col_legis = df['Legislación Laboral_y'] if 'Legislación Laboral_y' in df.columns else df.get('Legislación Laboral', pd.Series())
+        out['Tipo'] = col_legis.apply(transformar_legislacion) if isinstance(col_legis, pd.Series) else ""
+        
+        out['Org Unit Path [Required]'] = "" 
+        rbd_b = df['RBD_norm_y'] if 'RBD_norm_y' in df.columns else df.get('RBD_norm', '')
+        out['RBD'] = rbd_b
+        out['Establecimiento'] = df.get('Centro Costo', '')
+        out['ID_A'] = df.get('ID_A', '')
+        out['ID_B'] = df.get('ID_B', '')
+
+    if 'Last Name [Required]' in out.columns and not out.empty:
+        out['Last Name [Required]'] = out['Last Name [Required]'].astype(str).str.strip()
+
+    return out
 
 def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", directorio_salida="Resultados"):
     
@@ -52,7 +155,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     df_a['ID'] = (df_a['First_Name_norm'] + df_a['Last_Name_norm'] + df_a['RBD_norm']).str.replace(" ", "")
     df_a['ID_A'] = df_a['ID'] 
 
-    # 2. Diccionarios
+    # 2. Diccionarios de mapeo
     mapeo_jardines_raw = {
         "Sala Cuna Jardín Infantil Abejita Dul": "7102015",
         "Sala Cuna Jardín Infantil Caracolitos": "7102014",
@@ -85,10 +188,8 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     }
 
     mapeo_jardines = {normalizar_texto(k).replace(" ", ""): v for k, v in mapeo_jardines_raw.items()}
-    # Se normalizan tanto las llaves como los valores para un cruce impecable
     mapeo_est_norm = {normalizar_texto(k): normalizar_texto(v) for k, v in mapeo_establecimientos_raw.items()}
 
-    # Función de evaluación bidireccional de establecimientos
     def son_mismos_establecimientos(est_a, est_b):
         if est_a == est_b:
             return True
@@ -132,7 +233,8 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             
             rbd_n = row.get('RBD_norm_y', row.get('RBD_norm', ''))
             cc_n = row.get('Centro_Costo_norm', '')
-            tipo = row.get('Tipo', '')
+            
+            tipo = row.get('Tipo_x', row.get('Tipo', ''))
             tipo = "" if pd.isna(tipo) else str(tipo)
             
             return f"/Comunas/{comuna}/{rbd_n} {cc_n}/{tipo}"
@@ -141,71 +243,120 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
         df_match['Employee ID'] = df_match['RUN_norm']
         df_match['Org Unit Path [Required]'] = df_match.apply(determinar_ou, axis=1)
         
-        # Ahora detectará correctamente si son equivalentes según tu diccionario y no mostrará un falso traslado
         df_match['Nuevo Establecimiento'] = df_match.apply(
             lambda row: row['Centro Costo'] if not son_mismos_establecimientos(row['Establecimiento_norm'], row['Centro_Costo_norm']) else "", axis=1
         )
 
-    # 5. Estructurar archivos de salida
-    def estructurar_salida(df, origen):
-        out = pd.DataFrame()
-        if origen == 'both':
-            out['First Name [Required]'] = df['First Name [Required]']
-            out['Last Name [Required]'] = df['Last Name [Required]']
-            out['Email Address [Required]'] = df['Email Address [Required]']
-            out['Employee ID'] = df['Employee ID']
-            out['Org Unit Path [Required]'] = df['Org Unit Path [Required]']
-            out['RBD'] = df.get('RBD_x', df.get('RBD', ''))
-            out['Establecimiento'] = df['Establecimiento']
-            out['Nuevo Establecimiento'] = df.get('Nuevo Establecimiento', "")
-            out['ID_A'] = df['ID_A']
-            out['ID_B'] = df['ID_B']
-        elif origen == 'A':
-            out['First Name [Required]'] = df['First Name [Required]']
-            out['Last Name [Required]'] = df['Last Name [Required]']
-            out['Email Address [Required]'] = df['Email Address [Required]']
-            out['Employee ID'] = df['Employee ID'] if 'Employee ID' in df.columns else ""
-            out['Org Unit Path [Required]'] = df['Org Unit Path [Required]']
-            out['Org Unit Path nuevo [Required]'] = "/Archivados Funcionarios"
-            out['RBD'] = df.get('RBD_x', df.get('RBD', ''))
-            out['Establecimiento'] = df['Establecimiento']
-            out['ID_A'] = df['ID_A']
-            out['ID_B'] = df['ID_B']
-        elif origen == 'B':
-            out['First Name [Required]'] = df['Nombres']
-            out['Last Name [Required]'] = df['Apellido Paterno'].fillna('') + " " + df['Apellido Materno'].fillna('')
-            out['Email Address [Required]'] = ""
-            out['Employee ID'] = df['RUN_norm']
-            out['Org Unit Path [Required]'] = "" 
-            out['RBD'] = df.get('RBD_norm_y', df.get('RBD_norm', ''))
-            out['Establecimiento'] = df['Centro Costo']
-            out['ID_A'] = df['ID_A']
-            out['ID_B'] = df['ID_B']
-            
-        if not out.empty:
-            out['Last Name [Required]'] = out['Last Name [Required]'].str.strip()
-        return out
+    df_solo_a = df_merge[df_merge['_merge'] == 'left_only'].copy()
+    df_solo_b = df_merge[df_merge['_merge'] == 'right_only'].copy()
 
-    out_match = estructurar_salida(df_match, 'both')
-    out_solo_a = estructurar_salida(df_merge[df_merge['_merge'] == 'left_only'].copy(), 'A')
-    out_solo_b = estructurar_salida(df_merge[df_merge['_merge'] == 'right_only'].copy(), 'B')
+    # 5. Generar DataFrames informativos para trazabilidad (Excel)
+    excel_coincidencias = estructurar_salida_excel(df_match, 'both')
+    excel_solo_a_eliminar = estructurar_salida_excel(df_solo_a, 'A')
+    excel_solo_b_nuevos = estructurar_salida_excel(df_solo_b, 'B')
 
-    # 6. Exportar y Estadísticas
+    # 6. Generar estructuras CSV consolidadas para Google Workspace (29 columnas)
+    csv_match = formatear_csv_workspace(
+        df_match,
+        mapping_cols={
+            'First Name [Required]': 'First Name [Required]',
+            'Last Name [Required]': 'Last Name [Required]',
+            'Email Address [Required]': 'Email Address [Required]',
+            'Org Unit Path [Required]': 'Org Unit Path [Required]',
+            'Employee ID': 'RUN_norm'
+        }
+    )
+
+    csv_solo_a_eliminar = formatear_csv_workspace(
+        df_solo_a,
+        mapping_cols={
+            'First Name [Required]': 'First Name [Required]',
+            'Last Name [Required]': 'Last Name [Required]',
+            'Email Address [Required]': 'Email Address [Required]',
+            'Employee ID': 'Employee ID'
+        },
+        valores_fijos={
+            'Org Unit Path [Required]': '/Archivados Funcionarios',
+            'New Licenses [UPLOAD ONLY]': '1010070004',
+            'New Status [UPLOAD ONLY]': 'Archived'
+        }
+    )
+
+    # 7. Exportar los 5 archivos generales
     os.makedirs(directorio_salida, exist_ok=True)
-    out_match.to_excel(os.path.join(directorio_salida, 'coincidencias.xlsx'), index=False)
-    out_solo_a.to_excel(os.path.join(directorio_salida, 'solo_a_eliminar.xlsx'), index=False)
-    out_solo_b.to_excel(os.path.join(directorio_salida, 'solo_b_nuevos.xlsx'), index=False)
     
-    cambios_est = len(out_match[out_match['Nuevo Establecimiento'] != ""]) if not out_match.empty else 0
-    nuevos = len(out_solo_b)
-    eliminar = len(out_solo_a)
+    excel_coincidencias.to_excel(os.path.join(directorio_salida, 'coincidencias.xlsx'), index=False)
+    excel_solo_a_eliminar.to_excel(os.path.join(directorio_salida, 'solo_a_eliminar.xlsx'), index=False)
+    excel_solo_b_nuevos.to_excel(os.path.join(directorio_salida, 'solo_b_nuevos.xlsx'), index=False)
 
+    csv_match.to_csv(os.path.join(directorio_salida, 'match.csv'), index=False, encoding='utf-8')
+    csv_solo_a_eliminar.to_csv(os.path.join(directorio_salida, 'solo_a_eliminar.csv'), index=False, encoding='utf-8')
+
+    # 8. GENERAR CARPETAS SEPARADAS POR ESTABLECIMIENTO
+    dir_separados = os.path.join(directorio_salida, 'separados')
+    dir_match_sep = os.path.join(dir_separados, 'match')
+    dir_eliminar_sep = os.path.join(dir_separados, 'eliminar')
+
+    os.makedirs(dir_match_sep, exist_ok=True)
+    os.makedirs(dir_eliminar_sep, exist_ok=True)
+
+    # 8.1 Separar CSVs de MATCH por establecimiento
+    if not df_match.empty:
+        # Usar el Centro Costo actualizado de B o el Establecimiento original de A
+        df_match['Establecimiento_Grupo'] = df_match['Centro Costo'].fillna('').astype(str)
+        df_match['Establecimiento_Grupo'] = df_match['Establecimiento_Grupo'].replace('', pd.NA).fillna(df_match['Establecimiento'])
+
+        count_match_files = 0
+        for est_nombre, grupo in df_match.groupby('Establecimiento_Grupo'):
+            csv_sub_match = formatear_csv_workspace(
+                grupo,
+                mapping_cols={
+                    'First Name [Required]': 'First Name [Required]',
+                    'Last Name [Required]': 'Last Name [Required]',
+                    'Email Address [Required]': 'Email Address [Required]',
+                    'Org Unit Path [Required]': 'Org Unit Path [Required]',
+                    'Employee ID': 'RUN_norm'
+                }
+            )
+            nombre_file = f"{sanitizar_nombre_archivo(est_nombre)}.csv"
+            csv_sub_match.to_csv(os.path.join(dir_match_sep, nombre_file), index=False, encoding='utf-8')
+            count_match_files += 1
+
+    # 8.2 Separar CSVs de ELIMINAR por establecimiento
+    if not df_solo_a.empty:
+        count_eliminar_files = 0
+        for est_nombre, grupo in df_solo_a.groupby('Establecimiento'):
+            csv_sub_eliminar = formatear_csv_workspace(
+                grupo,
+                mapping_cols={
+                    'First Name [Required]': 'First Name [Required]',
+                    'Last Name [Required]': 'Last Name [Required]',
+                    'Email Address [Required]': 'Email Address [Required]',
+                    'Employee ID': 'Employee ID'
+                },
+                valores_fijos={
+                    'Org Unit Path [Required]': '/Archivados Funcionarios',
+                    'New Licenses [UPLOAD ONLY]': '1010070004',
+                    'New Status [UPLOAD ONLY]': 'Archived'
+                }
+            )
+            nombre_file = f"{sanitizar_nombre_archivo(est_nombre)}.csv"
+            csv_sub_eliminar.to_csv(os.path.join(dir_eliminar_sep, nombre_file), index=False, encoding='utf-8')
+            count_eliminar_files += 1
+
+    # 9. Resumen en consola
+    cambios_est = len(df_match[df_match['Nuevo Establecimiento'] != ""]) if not df_match.empty else 0
+    
     print("\n--- RESUMEN DEL PROCESO ---")
-    print(f"✅ Funcionarios con cambio de establecimiento detectado: {cambios_est}")
-    print(f"➕ Funcionarios que se deben agregar (Solo B): {nuevos}")
-    print(f"➖ Funcionarios que se deben eliminar/archivar (Solo A): {eliminar}")
-    print(f"📁 Archivos guardados en la carpeta '{directorio_salida}'")
-
+    print(f"✅ Coincidencias procesadas: {len(df_match)} (Con cambio de colegio: {cambios_est})")
+    print(f"➕ Funcionarios a agregar (Solo B): {len(df_solo_b)}")
+    print(f"➖ Funcionarios a eliminar/archivar (Solo A): {len(df_solo_a)}")
+    print(f"\n📁 Archivos principales generados en '{directorio_salida}':")
+    print("  Excel (.xlsx): coincidencias.xlsx | solo_a_eliminar.xlsx | solo_b_nuevos.xlsx")
+    print("  CSV (.csv):   match.csv | solo_a_eliminar.csv")
+    print(f"\n📂 Archivos individuales generados en '{dir_separados}':")
+    print(f"  • {count_match_files} archivos creados en: separados/match/")
+    print(f"  • {count_eliminar_files} archivos creados en: separados/eliminar/")
 
 if __name__ == "__main__":
     procesar_cuentas(
