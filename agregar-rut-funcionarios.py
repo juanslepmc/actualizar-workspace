@@ -91,6 +91,7 @@ def estructurar_salida_excel(df, origen):
         out['RBD'] = df['RBD_x'] if 'RBD_x' in df.columns else df.get('RBD', '')
         out['Establecimiento'] = df.get('Establecimiento', '')
         out['Nuevo Establecimiento'] = df.get('Nuevo Establecimiento', '')
+        out['Tipo Contrato'] = df['Tipo Contrato_y'] if 'Tipo Contrato_y' in df.columns else df.get('Tipo Contrato', '')
         out['ID_A'] = df.get('ID_A', '')
         out['ID_B'] = df.get('ID_B', '')
     elif origen == 'A':
@@ -118,6 +119,7 @@ def estructurar_salida_excel(df, origen):
         rbd_b = df['RBD_norm_y'] if 'RBD_norm_y' in df.columns else df.get('RBD_norm', '')
         out['RBD'] = rbd_b
         out['Establecimiento'] = df.get('Centro Costo', '')
+        out['Tipo Contrato'] = df['Tipo Contrato_y'] if 'Tipo Contrato_y' in df.columns else df.get('Tipo Contrato', '')
         out['ID_A'] = df.get('ID_A', '')
         out['ID_B'] = df.get('ID_B', '')
 
@@ -165,7 +167,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
         "Sala Cuna Jardín Infantil Claro de Luna": "7201009",
         "Sala Cuna Jardín Infantil Los Grillitos de Porongo": "7201011",
         "Sala Cuna Jardín Infantil Mi Pequeño Mundo": "7104009",
-        "Sala Cuna Jardín Infantil Lucerito de Esperanza": "7203003",
+        "Sala Cuna Jardín Infantil Lucerito de Esperanza": "7201010",
         "Sala Cuna Jardín Infantil La Casita en el Bosque": "7203001",
         "Sala Cuna Jardín Infantil Personitas": "7102010",
         "Sala Cuna Jardín Infantil Sol de Esperanza": "7203003",
@@ -186,6 +188,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
         "SALA CUNA JARDIN CARACOLITOS": "Sala Cuna Jardín Infantil Caracolitos",
         "SALA CUNA JARDIN INFANTIL CARITA DE ANGEL": "Sala Cuna Jardín Carita de Ángel"
     }
+
 
     mapeo_jardines = {normalizar_texto(k).replace(" ", ""): v for k, v in mapeo_jardines_raw.items()}
     mapeo_est_norm = {normalizar_texto(k): normalizar_texto(v) for k, v in mapeo_establecimientos_raw.items()}
