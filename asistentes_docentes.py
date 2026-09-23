@@ -18,6 +18,78 @@ PLANTILLA_WORKSPACE_COLUMNAS = [
 
 ESTABLECIMIENTO_EXCLUIDO = "SERVICIO LOCAL MAULE COSTA P02"
 
+# Diccionario Oficial de Establecimientos (68 RBDs)
+DICCIONARIO_ESTABLECIMIENTOS_DEFAULT = {
+    "3170": {"nombre": "CENTRO EDUCACIONAL CONSTITUCIÓN", "comuna": "Constitucion"},
+    "3544": {"nombre": "COLEGIO BLANCO ENCALADA", "comuna": "Cauquenes"},
+    "3552": {"nombre": "ESCUELA ADOLFO QUIROZ HERNANDEZ", "comuna": "Cauquenes"},
+    "3541": {"nombre": "ESCUELA ANIBAL PINTO", "comuna": "Cauquenes"},
+    "3632": {"nombre": "ESCUELA ANTONIETA LEON VERDUGO", "comuna": "Chanco"},
+    "3545": {"nombre": "ESCUELA ARTISTICA BARRIO ESTACION", "comuna": "Cauquenes"},
+    "3179": {"nombre": "ESCUELA BARRANQUILLAS", "comuna": "Constitucion"},
+    "3616": {"nombre": "ESCUELA BENITO MANCILLA PEREZ", "comuna": "Pelluhue"},
+    "3611": {"nombre": "ESCUELA BLANCA BUSTOS CASTILLO", "comuna": "Pelluhue"},
+    "3604": {"nombre": "ESCUELA CABRERIA", "comuna": "Cauquenes"},
+    "3623": {"nombre": "ESCUELA CARRERAS CORTAS", "comuna": "Chanco"},
+    "3187": {"nombre": "ESCUELA CARRIZALILLO", "comuna": "Constitucion"},
+    "3169": {"nombre": "ESCUELA CERRO ALTO JOSE OPAZO DIAZ", "comuna": "Constitucion"},
+    "16506": {"nombre": "ESCUELA CHACARILLAS", "comuna": "Constitucion"},
+    "3586": {"nombre": "ESCUELA CHORRILLOS", "comuna": "Cauquenes"},
+    "3554": {"nombre": "ESCUELA CLORINDO ALVEAR", "comuna": "Cauquenes"},
+    "3185": {"nombre": "ESCUELA COSTA BLANCA", "comuna": "Constitucion"},
+    "3548": {"nombre": "ESCUELA ECOLOGICA ROSITA OHIGGINS", "comuna": "Cauquenes"},
+    "3198": {"nombre": "ESCUELA EDUARDO MACHADO CORSI", "comuna": "Constitucion"},
+    "3602": {"nombre": "ESCUELA EL TROZO", "comuna": "Cauquenes"},
+    "3631": {"nombre": "ESCUELA EMA VASQUEZ GUTIERREZ", "comuna": "Chanco"},
+    "3166": {"nombre": "ESCUELA ENRIQUE DONN MULLER", "comuna": "Constitucion"},
+    "3615": {"nombre": "ESCUELA ESCRITORA MARCELA PAZ", "comuna": "Pelluhue"},
+    "3537": {"nombre": "ESCUELA ESPECIAL HORIZONTE", "comuna": "Cauquenes"},
+    "3625": {"nombre": "ESCUELA GABRIELA MISTRAL", "comuna": "Chanco"},
+    "3610": {"nombre": "ESCUELA GLADYS CANALES PAREDES", "comuna": "Pelluhue"},
+    "3564": {"nombre": "ESCUELA HECTOR SILVESTRE PAIVA MANRIQUEZ", "comuna": "Cauquenes"},
+    "3546": {"nombre": "ESCUELA INDEPENDENCIA", "comuna": "Cauquenes"},
+    "3569": {"nombre": "ESCUELA JAVIERA CARRERA", "comuna": "Cauquenes"},
+    "3579": {"nombre": "ESCUELA JOSE MUÑOZ LABRA (ex Rincon de Pilen)", "comuna": "Cauquenes"},
+    "3614": {"nombre": "ESCUELA JOSE RIVAS HERNANDEZ", "comuna": "Pelluhue"},
+    "3176": {"nombre": "ESCUELA JUNQUILLAR", "comuna": "Constitucion"},
+    "3596": {"nombre": "ESCUELA LA CAPILLA DE PILEN ALTO", "comuna": "Cauquenes"},
+    "3174": {"nombre": "ESCUELA LAS CORRIENTES", "comuna": "Constitucion"},
+    "3636": {"nombre": "ESCUELA LOANCO", "comuna": "Chanco"},
+    "3551": {"nombre": "ESCUELA LOS CONQUISTADORES", "comuna": "Cauquenes"},
+    "3619": {"nombre": "ESCUELA LOS HEROES", "comuna": "Chanco"},
+    "3624": {"nombre": "ESCUELA LOS PEUMOS", "comuna": "Chanco"},
+    "3177": {"nombre": "ESCUELA MARIA INES MAROMILLAS", "comuna": "Constitucion"},
+    "3134": {"nombre": "ESCUELA MARIA OLGA VEGA VEGA", "comuna": "Empedrado"},
+    "3186": {"nombre": "ESCUELA MIGUEL FAUNDEZ MORALES", "comuna": "Constitucion"},
+    "3599": {"nombre": "ESCUELA MIXTA ATENEA", "comuna": "Cauquenes"},
+    "3555": {"nombre": "ESCUELA OCTAVIO PALMA PEREZ", "comuna": "Cauquenes"},
+    "3622": {"nombre": "ESCUELA PAHUIL", "comuna": "Chanco"},
+    "3580": {"nombre": "ESCUELA PEDERNALES", "comuna": "Cauquenes"},
+    "3130": {"nombre": "ESCUELA PEDRO ANTONIO TEJOS TEJOS", "comuna": "Empedrado"},
+    "3573": {"nombre": "ESCUELA PEDRO DE VALDIVIA", "comuna": "Cauquenes"},
+    "3549": {"nombre": "ESCUELA PORONGO", "comuna": "Cauquenes"},
+    "3550": {"nombre": "ESCUELA PURISIMA CONCEPCION DE POCILLAS", "comuna": "Cauquenes"},
+    "3633": {"nombre": "ESCUELA QUINIPATO", "comuna": "Chanco"},
+    "3626": {"nombre": "ESCUELA RELOCA", "comuna": "Chanco"},
+    "3630": {"nombre": "ESCUELA RICARDO SALGADO", "comuna": "Chanco"},
+    "3190": {"nombre": "ESCUELA RURAL QUEBRADA VERDE", "comuna": "Constitucion"},
+    "3612": {"nombre": "ESCUELA SAN ALFONSO CANELILLO", "comuna": "Pelluhue"},
+    "3621": {"nombre": "ESCUELA SAN AMBROSIO", "comuna": "Chanco"},
+    "3191": {"nombre": "ESCUELA SANTA AURORA DE CARRIZAL", "comuna": "Constitucion"},
+    "3168": {"nombre": "ESCUELA SUPERIOR NUEVA BILBAO", "comuna": "Constitucion"},
+    "3189": {"nombre": "ESCUELA TERESA CONSUELO", "comuna": "Constitucion"},
+    "3538": {"nombre": "LICEO ANTONIO VARAS", "comuna": "Cauquenes"},
+    "16751": {"nombre": "LICEO BICENTENARIO DE CAUQUENES", "comuna": "Cauquenes"},
+    "3539": {"nombre": "LICEO CLAUDINA URRUTIA DE LAVIN", "comuna": "Cauquenes"},
+    "3165": {"nombre": "LICEO DE CONSTITUCION", "comuna": "Constitucion"},
+    "3618": {"nombre": "LICEO FEDERICO ALBERT FAUPP", "comuna": "Chanco"},
+    "3609": {"nombre": "LICEO PELLUHUE", "comuna": "Pelluhue"},
+    "3540": {"nombre": "LICEO POLITECNICO PEDRO AGUIRRE CERDA", "comuna": "Cauquenes"},
+    "3173": {"nombre": "LICEO RURAL ENRIQUE MAC IVER", "comuna": "Constitucion"},
+    "3128": {"nombre": "LICEO SAN IGNACIO", "comuna": "Empedrado"},
+    "3172": {"nombre": "LICEO TECNICO PROFESIONAL PUTU", "comuna": "Constitucion"}
+}
+
 def normalizar_texto(texto):
     if pd.isna(texto):
         return ""
@@ -163,7 +235,6 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     df_a = cargar_archivo(ruta_a)
     df_b = cargar_archivo(ruta_b)
 
-    # Normalización de encabezados
     alias_a = {'employee id': 'Employee ID', 'employee id [upload only]': 'Employee ID', 'rut': 'Employee ID', 'run': 'Employee ID'}
     cols_req_a = ['First Name [Required]', 'Last Name [Required]', 'Email Address [Required]', 'Employee ID', 'RBD', 'Establecimiento', 'Tipo', 'Org Unit Path [Required]']
     df_a = estandarizar_y_asegurar_columnas(df_a, cols_req_a, alias_a)
@@ -172,11 +243,9 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     cols_req_b = ['Nombres', 'Apellido Paterno', 'Apellido Materno', 'R.U.N', 'RBD', 'Centro Costo', 'Legislación Laboral', 'Tipo Contrato', 'Comuna']
     df_b = estandarizar_y_asegurar_columnas(df_b, cols_req_b, alias_b)
 
-    # Exclusión de "Servicio Local Maule Costa P02"
     df_a = df_a[df_a['Establecimiento'].apply(normalizar_texto) != ESTABLECIMIENTO_EXCLUIDO].copy()
     df_b = df_b[df_b['Centro Costo'].apply(normalizar_texto) != ESTABLECIMIENTO_EXCLUIDO].copy()
 
-    # Normalización Archivo A
     df_a['First_Name_norm'] = df_a['First Name [Required]'].apply(normalizar_texto)
     df_a['Last_Name_norm'] = df_a['Last Name [Required]'].apply(normalizar_texto)
     df_a['RBD_norm'] = df_a['RBD'].apply(normalizar_rbd)
@@ -189,7 +258,6 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     df_sin_emp_id = df_a[mask_sin_emp_id].copy()
     df_a_valido = df_a[~mask_sin_emp_id].copy()
 
-    # Mapeos
     mapeo_jardines_raw = {
         "Sala Cuna Jardín Infantil Abejita Dul": "7102015",
         "Sala Cuna Jardín Infantil Caracolitos": "7102014",
@@ -233,7 +301,6 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             return True
         return False
 
-    # Normalización Archivo B
     df_b['Nombres_norm'] = df_b['Nombres'].apply(normalizar_texto)
     df_b['Ap_Paterno_norm'] = df_b['Apellido Paterno'].apply(normalizar_texto)
     df_b['Ap_Materno_norm'] = df_b['Apellido Materno'].apply(normalizar_texto)
@@ -255,7 +322,6 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
 
     df_b['ID'] = df_b['ID'].replace('', pd.NA)
 
-    # Cruce de datos
     df_merge = pd.merge(df_a_valido, df_b, on='ID', how='outer', indicator=True)
     df_match = df_merge[df_merge['_merge'] == 'both'].copy()
     
@@ -263,12 +329,16 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
         if son_mismos_establecimientos(row['Establecimiento_norm'], row['Centro_Costo_norm']):
             return row['Org Unit Path [Required]']
         else:
-            comuna = row.get('Comuna', '')
-            comuna = "" if pd.isna(comuna) else str(comuna)
+            rbd_n = str(row.get('RBD_norm_y', row.get('RBD_norm', ''))).strip()
             
-            rbd_n = row.get('RBD_norm_y', row.get('RBD_norm', ''))
+            comuna = ""
+            if rbd_n in DICCIONARIO_ESTABLECIMIENTOS_DEFAULT:
+                comuna = DICCIONARIO_ESTABLECIMIENTOS_DEFAULT[rbd_n]["comuna"]
+            else:
+                val_com = row.get('Comuna', row.get('Comuna_y', ''))
+                comuna = "" if pd.isna(val_com) else str(val_com).strip()
+            
             cc_n = row.get('Centro_Costo_norm', '')
-            
             tipo = row.get('Tipo_x', row.get('Tipo', ''))
             tipo = "" if pd.isna(tipo) else str(tipo)
             
@@ -282,18 +352,15 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             lambda row: row['Centro Costo'] if not son_mismos_establecimientos(row['Establecimiento_norm'], row['Centro_Costo_norm']) else "", axis=1
         )
 
-    # FILTRO CLAVE: Solamente cuentas que tuvieron cambio de establecimiento
     df_match_cambiados = df_match[df_match['Nuevo Establecimiento'] != ""].copy() if not df_match.empty else pd.DataFrame()
 
     df_solo_a = df_merge[df_merge['_merge'] == 'left_only'].copy()
     df_solo_b = df_merge[df_merge['_merge'] == 'right_only'].copy()
 
-    # Informes Excel (el Excel conserva todos los matches para auditoría)
     excel_coincidencias = estructurar_salida_excel(df_match, 'both')
     excel_solo_a_eliminar = estructurar_salida_excel(df_solo_a, 'A')
     excel_solo_b_nuevos = estructurar_salida_excel(df_solo_b, 'B')
 
-    # CSV match.csv filtrado (Solo con cambios de establecimiento)
     csv_match = formatear_csv_workspace(
         df_match_cambiados,
         mapping_cols={
@@ -308,6 +375,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
         }
     )
 
+    # Agregada la contraseña '****' para las cuentas a eliminar / archivar
     csv_solo_a_eliminar = formatear_csv_workspace(
         df_solo_a,
         mapping_cols={
@@ -317,13 +385,13 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             'Employee ID': 'Employee ID'
         },
         valores_fijos={
+            'Password [Required]': '****',
             'Org Unit Path [Required]': '/Archivados Funcionarios',
             'New Licenses [UPLOAD ONLY]': '1010070004',
             'New Status [UPLOAD ONLY]': 'Archived'
         }
     )
 
-    # Exportación general
     os.makedirs(directorio_salida, exist_ok=True)
     
     excel_coincidencias.to_excel(os.path.join(directorio_salida, 'coincidencias.xlsx'), index=False)
@@ -344,6 +412,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
                 'Employee ID': 'Employee ID'
             },
             valores_fijos={
+                'Password [Required]': '****',
                 'Org Unit Path [Required]': '/Archivados Funcionarios',
                 'New Licenses [UPLOAD ONLY]': '1010070004',
                 'New Status [UPLOAD ONLY]': 'Archived'
@@ -352,7 +421,6 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
         excel_sin_emp_id.to_excel(os.path.join(directorio_salida, 'sin_employee_id.xlsx'), index=False)
         csv_sin_emp_id.to_csv(os.path.join(directorio_salida, 'sin_employee_id.csv'), index=False, encoding='utf-8')
 
-    # CARPETAS SEPARADAS (Solo exporta los que tienen cambios en match)
     dir_separados = os.path.join(directorio_salida, 'separados')
     dir_match_sep = os.path.join(dir_separados, 'match')
     dir_eliminar_sep = os.path.join(dir_separados, 'eliminar')
@@ -386,6 +454,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     count_eliminar_files = 0
     if not df_solo_a.empty:
         for est_nombre, grupo in df_solo_a.groupby('Establecimiento'):
+            # Agregada la contraseña '****' en los subarchivos de eliminar
             csv_sub_eliminar = formatear_csv_workspace(
                 grupo,
                 mapping_cols={
@@ -395,6 +464,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
                     'Employee ID': 'Employee ID'
                 },
                 valores_fijos={
+                    'Password [Required]': '****',
                     'Org Unit Path [Required]': '/Archivados Funcionarios',
                     'New Licenses [UPLOAD ONLY]': '1010070004',
                     'New Status [UPLOAD ONLY]': 'Archived'
@@ -404,7 +474,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             csv_sub_eliminar.to_csv(os.path.join(dir_eliminar_sep, nombre_file), index=False, encoding='utf-8')
             count_eliminar_files += 1
 
-    # Resumen en consola
+    # Resumen
     total_coincidencias = len(df_match)
     cuentas_a_actualizar = len(df_match_cambiados)
     cuentas_sin_cambio = total_coincidencias - cuentas_a_actualizar
@@ -417,21 +487,6 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
     print(f"➖ Funcionarios a eliminar/archivar (Solo A): {len(df_solo_a)}")
     if not df_sin_emp_id.empty:
         print(f"⚠️  Cuentas sin Employee ID (Archivo A): {len(df_sin_emp_id)}")
-        
-    print(f"\n📁 Archivos principales generados en '{directorio_salida}':")
-    archivos_txt = "  Excel (.xlsx): coincidencias.xlsx | solo_a_eliminar.xlsx | solo_b_nuevos.xlsx"
-    if not df_sin_emp_id.empty:
-        archivos_txt += " | sin_employee_id.xlsx"
-    print(archivos_txt)
-    
-    csv_txt = "  CSV (.csv):   match.csv | solo_a_eliminar.csv"
-    if not df_sin_emp_id.empty:
-        csv_txt += " | sin_employee_id.csv"
-    print(csv_txt)
-    
-    print(f"\n📂 Archivos individuales en '{dir_separados}':")
-    print(f"  • {count_match_files} archivos creados en: separados/match/")
-    print(f"  • {count_eliminar_files} archivos creados en: separados/eliminar/")
 
 if __name__ == "__main__":
     procesar_cuentas(
