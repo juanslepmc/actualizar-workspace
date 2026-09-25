@@ -352,7 +352,7 @@ def procesar_estudiantes(nombre_archivo_a, nombre_archivo_b, directorio_base="",
     excel_solo_a_eliminar.to_excel(os.path.join(directorio_salida, 'solo_a_eliminar.xlsx'), index=False)
     excel_solo_b_nuevos.to_excel(os.path.join(directorio_salida, 'solo_b_nuevos.xlsx'), index=False)
 
-    # NUEVO: EXPORTAR SOLO SI EXISTEN CUENTAS SIN EMPLOYEE ID
+    # EXPORTAR SOLO SI EXISTEN CUENTAS SIN EMPLOYEE ID (CON PASSWORD ****)
     if not df_a_sin_id.empty:
         excel_sin_employee_id = estructurar_salida_excel_estudiantes(df_a_sin_id, 'A_sin_id')
         csv_sin_employee_id = formatear_csv_workspace(
@@ -364,8 +364,9 @@ def procesar_estudiantes(nombre_archivo_a, nombre_archivo_b, directorio_base="",
                 'Employee ID': 'Employee ID'
             },
             valores_fijos={
+                'Password [Required]': '****',
                 'Org Unit Path [Required]': '/Archivados Estudiantes',
-                'New Licenses [UPLOAD ONLY]': '1010070004',
+                #'New Licenses [UPLOAD ONLY]': '1010070004',
                 'New Status [UPLOAD ONLY]': 'Archived'
             }
         )
@@ -393,8 +394,9 @@ def procesar_estudiantes(nombre_archivo_a, nombre_archivo_b, directorio_base="",
             'Employee ID': 'Employee ID'
         },
         valores_fijos={
+            'Password [Required]': '****',
             'Org Unit Path [Required]': '/Archivados Estudiantes',
-            'New Licenses [UPLOAD ONLY]': '1010070004',
+            #'New Licenses [UPLOAD ONLY]': '1010070004',
             'New Status [UPLOAD ONLY]': 'Archived'
         }
     )
@@ -445,8 +447,9 @@ def procesar_estudiantes(nombre_archivo_a, nombre_archivo_b, directorio_base="",
                     'Employee ID': 'Employee ID'
                 },
                 valores_fijos={
+                    'Password [Required]': '****',
                     'Org Unit Path [Required]': '/Archivados Estudiantes',
-                    'New Licenses [UPLOAD ONLY]': '1010070004',
+                    #'New Licenses [UPLOAD ONLY]': '1010070004',
                     'New Status [UPLOAD ONLY]': 'Archived'
                 }
             )

@@ -387,7 +387,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
         valores_fijos={
             'Password [Required]': '****',
             'Org Unit Path [Required]': '/Archivados Funcionarios',
-            'New Licenses [UPLOAD ONLY]': '1010070004',
+            #'New Licenses [UPLOAD ONLY]': '1010070004',
             'New Status [UPLOAD ONLY]': 'Archived'
         }
     )
@@ -414,7 +414,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
             valores_fijos={
                 'Password [Required]': '****',
                 'Org Unit Path [Required]': '/Archivados Funcionarios',
-                'New Licenses [UPLOAD ONLY]': '1010070004',
+                #'New Licenses [UPLOAD ONLY]': '1010070004',
                 'New Status [UPLOAD ONLY]': 'Archived'
             }
         )
@@ -466,7 +466,7 @@ def procesar_cuentas(nombre_archivo_a, nombre_archivo_b, directorio_base="", dir
                 valores_fijos={
                     'Password [Required]': '****',
                     'Org Unit Path [Required]': '/Archivados Funcionarios',
-                    'New Licenses [UPLOAD ONLY]': '1010070004',
+                    #'New Licenses [UPLOAD ONLY]': '1010070004',
                     'New Status [UPLOAD ONLY]': 'Archived'
                 }
             )

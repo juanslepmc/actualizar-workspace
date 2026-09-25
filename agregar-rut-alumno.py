@@ -360,7 +360,7 @@ def procesar_estudiantes(nombre_archivo_a, nombre_archivo_b, directorio_base="",
         },
         valores_fijos={
             'Org Unit Path [Required]': '/Archivados Estudiantes',
-            'New Licenses [UPLOAD ONLY]': '1010070004',
+            #'New Licenses [UPLOAD ONLY]': '1010070004',
             'New Status [UPLOAD ONLY]': 'Archived'
         }
     )
@@ -417,7 +417,7 @@ def procesar_estudiantes(nombre_archivo_a, nombre_archivo_b, directorio_base="",
                 },
                 valores_fijos={
                     'Org Unit Path [Required]': '/Archivados Estudiantes',
-                    'New Licenses [UPLOAD ONLY]': '1010070004',
+                    #'New Licenses [UPLOAD ONLY]': '1010070004',
                     'New Status [UPLOAD ONLY]': 'Archived'
                 }
             )
